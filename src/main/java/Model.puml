@@ -1,0 +1,48 @@
+@startuml
+
+participant PizzaProducer
+entity Queue
+
+Customer->Queue : dequeue
+activate Customer
+...
+PizzaProducer->Queue : enqueue
+activate PizzaProducer
+Queue-->Customer
+deactivate Customer
+Queue-->PizzaProducer
+deactivate PizzaProducer
+/'
+Person -> MicrowaveOven : Cook Food
+activate PizzaProducer
+par
+PizzaProducer -> PizzaProducer : Bake domain.Pizza
+else
+PizzaProducer -> PizzaProducer : Bake domain.Pizza
+end
+
+activate MicrowaveOven
+par
+MicrowaveOven -> MicrowaveOven : Activate Client
+else
+MicrowaveOven -> MicrowaveOven : Activate Client
+end
+
+
+MicrowaveOven --> Person : Delicious Food
+deactivate MicrowaveOven
+participant "Client" as C
+participant "entries.Server" as S
+participant "Third Party" as 3PT
+
+C -> S++: login
+S -> S: do I know you?
+S -> 3PT++: give me money for client
+return here you have money
+S ->> S++ #005500: compute usage
+S ->> 3PT: notify about computation details
+deactivate S
+return money
+'/
+
+@enduml
